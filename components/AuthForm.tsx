@@ -17,6 +17,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import { createAccount } from "@/lib/actions/user.actions";
+import OTPModal from "./OTPModal";
 
 interface AuthFormProps {
   type: "sign-in" | "sign-up";
@@ -43,6 +44,7 @@ const AuthForm = ({ type }: AuthFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    setErrorMessage("");
 
     try {
       const user = await createAccount({
@@ -140,6 +142,9 @@ const AuthForm = ({ type }: AuthFormProps) => {
         </form>
       </Form>
       {/* OTP Verification */}
+      {accountId && (
+        <OTPModal email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 };
