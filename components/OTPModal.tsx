@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +17,8 @@ import {
 import Image from "next/image";
 import { MouseEvent, useState } from "react";
 import { Button } from "./ui/button";
+import { sendEmailOTP, verifySecret } from "@/lib/actions/user.actions";
+import { useRouter } from "next/navigation";
 
 interface OTPModalProps {
   email: string;
@@ -22,6 +26,8 @@ interface OTPModalProps {
 }
 
 const OTPModal = ({ email, accountId }: OTPModalProps) => {
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(true);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +38,11 @@ const OTPModal = ({ email, accountId }: OTPModalProps) => {
 
     try {
       // Verify Otp
+      const sessionId = await verifySecret({ userId: accountId, password });
+
+      if (sessionId) {
+        router.push("/");
+      }
     } catch (error) {
       console.log("Failed to verify OTP", error);
     } finally {
@@ -41,6 +52,7 @@ const OTPModal = ({ email, accountId }: OTPModalProps) => {
 
   const handleResendOTP = async () => {
     // Resend OTP
+    await sendEmailOTP(email);
   };
 
   return (
@@ -83,7 +95,7 @@ const OTPModal = ({ email, accountId }: OTPModalProps) => {
               Submit
               {isLoading && (
                 <Image
-                  src={"/public/assets/icons/loader.svg"}
+                  src={"/assets/icons/loader.svg"}
                   alt="Loader"
                   width={24}
                   height={24}
