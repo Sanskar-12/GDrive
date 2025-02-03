@@ -20,7 +20,14 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
         avatar={currentUser.avatar}
       />
       <section className="flex h-full flex-1 flex-col">
-        <MobileNavigation /> <Header />
+        <MobileNavigation
+          fullName={currentUser.fullName}
+          email={currentUser.email}
+          avatar={currentUser.avatar}
+          accountId={currentUser.accountId}
+          ownerId={currentUser.$id}
+        />
+        <Header />
         <div className="main-content">{children}</div>
       </section>
     </main>
