@@ -16,7 +16,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
-import { createAccount } from "@/lib/actions/user.actions";
+import { createAccount, signInUser } from "@/lib/actions/user.actions";
 import OTPModal from "./OTPModal";
 
 interface AuthFormProps {
@@ -47,10 +47,13 @@ const AuthForm = ({ type }: AuthFormProps) => {
     setErrorMessage("");
 
     try {
-      const user = await createAccount({
-        fullName: values.fullName || "",
-        email: values.email,
-      });
+      const user =
+        type === "sign-up"
+          ? await createAccount({
+              fullName: values.fullName || "",
+              email: values.email,
+            })
+          : await signInUser(values.email);
 
       setAccountId(user.userId);
     } catch {
