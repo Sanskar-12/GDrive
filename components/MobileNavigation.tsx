@@ -5,8 +5,6 @@ import React, { useState } from "react";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
@@ -17,6 +15,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import FileUploader from "./FileUploader";
+import { logoutUser } from "@/lib/actions/user.actions";
 
 interface MobileNavigationProps {
   fullName: string;
@@ -100,7 +99,11 @@ const MobileNavigation = ({
           <div className="flex flex-col justify-between gap-5 pb-5">
             {/* FileUploader */}
             <FileUploader />
-            <Button type="submit" className="mobile-sign-out-button">
+            <Button
+              type="submit"
+              className="mobile-sign-out-button"
+              onClick={logoutUser}
+            >
               <Image
                 src={"/assets/icons/logout.svg"}
                 alt="Logo"
