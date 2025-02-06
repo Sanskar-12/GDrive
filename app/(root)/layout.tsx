@@ -27,7 +27,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           accountId={currentUser.accountId}
           ownerId={currentUser.$id}
         />
-        <Header />
+        <Header accountId={currentUser.accountId} ownerId={currentUser.$id} />
         <div className="main-content">{children}</div>
       </section>
     </main>

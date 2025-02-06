@@ -23,8 +23,6 @@ export const uploadFile = async ({
   try {
     const inputFile = InputFile.fromBuffer(file, file.name);
 
-    console.log(inputFile);
-
     const bucketFile = await storage.createFile(
       appWriteConfig.bucketId,
       ID.unique(),
