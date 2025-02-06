@@ -27,8 +27,6 @@ const FileUploader = ({
 
   const [files, setFiles] = useState<File[]>([]);
 
-  console.log(files);
-
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       setFiles(acceptedFiles);
@@ -68,7 +66,7 @@ const FileUploader = ({
   );
 
   const handleRemoveFile = (
-    e: MouseEvent<HTMLInputElement, MouseEvent>,
+    e: MouseEvent<HTMLImageElement, MouseEvent>,
     fileName: string
   ) => {
     e.stopPropagation();
