@@ -66,7 +66,7 @@ const FileUploader = ({
   );
 
   const handleRemoveFile = (
-    e: MouseEvent<HTMLImageElement, MouseEvent<Element, MouseEvent>>,
+    e: MouseEvent<HTMLImageElement>,
     fileName: string
   ) => {
     e.stopPropagation();
