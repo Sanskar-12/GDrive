@@ -1,3 +1,5 @@
+import Sort from "@/components/Sort";
+
 const Page = async ({ params }: SearchParamProps) => {
   const type = ((await params)?.type as string) || "";
 
@@ -11,6 +13,7 @@ const Page = async ({ params }: SearchParamProps) => {
           </p>
           <div className="sort-container">
             <p className="body-1 hidden sm:block text-light-200">Sort by:</p>
+            <Sort />
           </div>
         </div>
       </section>
