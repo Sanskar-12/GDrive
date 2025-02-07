@@ -1,7 +1,12 @@
 import Sort from "@/components/Sort";
+import { getFiles } from "@/lib/actions/file.actions";
 
 const Page = async ({ params }: SearchParamProps) => {
   const type = ((await params)?.type as string) || "";
+
+  const files = await getFiles();
+
+  console.log(files);
 
   return (
     <div className="page-container">
