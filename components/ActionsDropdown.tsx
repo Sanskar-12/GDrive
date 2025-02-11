@@ -107,6 +107,12 @@ const ActionsDropdown = ({ file }: ActionsDropdownProps) => {
               onRemove={handleRemoveUser}
             />
           )}
+          {value === "delete" && (
+            <p className="delete-confirmation">
+              Are you sure you want to delete{" "}
+              <span className="delete-file-name">{file.name}</span>?
+            </p>
+          )}
         </DialogHeader>
         {["rename", "delete", "share"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
