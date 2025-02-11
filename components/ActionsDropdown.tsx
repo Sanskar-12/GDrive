@@ -12,7 +12,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -27,6 +26,7 @@ import { Button } from "./ui/button";
 import { renameFile } from "@/lib/actions/file.actions";
 import { usePathname } from "next/navigation";
 import { FileDetails } from "./ActionModalContent";
+import ShareInput from "./ShareInput";
 
 interface ActionsDropdownProps {
   file: Models.Document;
@@ -40,6 +40,7 @@ const ActionsDropdown = ({ file }: ActionsDropdownProps) => {
   const [action, setAction] = useState<ActionType | null>(null);
   const [name, setName] = useState(file.name);
   const [isLoading, setIsLoading] = useState(false);
+  const [emails, setEmails] = useState([]);
 
   const handleCloseModals = () => {
     setIsModalOpen(false);
@@ -47,6 +48,8 @@ const ActionsDropdown = ({ file }: ActionsDropdownProps) => {
     setName(file.name);
     setAction(null);
   };
+
+  const handleRemoveUser = (email: string) => {};
 
   const handleAction = async () => {
     if (!action) return;
@@ -86,6 +89,13 @@ const ActionsDropdown = ({ file }: ActionsDropdownProps) => {
             />
           )}
           {value === "details" && <FileDetails file={file} />}
+          {value === "share" && (
+            <ShareInput
+              file={file}
+              onInputChange={setEmails}
+              onRemove={handleRemoveUser}
+            />
+          )}
         </DialogHeader>
         {["rename", "delete", "share"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
