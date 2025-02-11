@@ -7,7 +7,7 @@ interface ActionModalContentProps {
   file: Models.Document;
 }
 
-const ImageThumbnail = ({ file }: { file: Models.Document }) => {
+export const ImageThumbnail = ({ file }: { file: Models.Document }) => {
   return (
     <div className="file-details-thumbnail">
       <Thumbnail type={file.type} extension={file.extension} url={file.url} />

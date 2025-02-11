@@ -1,6 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 
 declare type FileType = "document" | "image" | "video" | "audio" | "other";
+
+declare type FileObject = {
+  $collectionId: string;
+  $createdAt: string;
+  $databaseId: string;
+  $id: string;
+  $permissions: any[];
+  $updatedAt: string;
+  accountId: string;
+  bucketFileId: string;
+  extension: string;
+  name: string;
+  owner: {
+    fullName: string;
+    email: string;
+    avatar: string;
+    accountId: string;
+    $id: string;
+  };
+  size: number;
+  type: string;
+  url: string;
+  users: any[];
+};
 
 declare interface ActionType {
   label: string;

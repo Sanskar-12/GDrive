@@ -1,6 +1,7 @@
 import Card from "@/components/Card";
 import Sort from "@/components/Sort";
 import { getFiles } from "@/lib/actions/file.actions";
+import { convertFileSize } from "@/lib/utils";
 import { Models } from "node-appwrite";
 
 const Page = async ({ params }: SearchParamProps) => {
@@ -8,13 +9,17 @@ const Page = async ({ params }: SearchParamProps) => {
 
   const files = await getFiles();
 
+  let tot = 0;
+
+  files.documents.forEach((i: FileObject) => (tot = tot + i.size));
+
   return (
     <div className="page-container">
       <section className="w-full">
         <h1 className="h1 capitalize">{type}</h1>
         <div className="total-size-section">
           <p className="body-1">
-            Total: <span className="h5">0 MB</span>
+            Total: <span className="h5">{convertFileSize(tot)}</span>
           </p>
           <div className="sort-container">
             <p className="body-1 hidden sm:block text-light-200">Sort by:</p>
