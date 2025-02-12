@@ -76,7 +76,7 @@ const createQueries = (
     ]),
   ];
 
-  if (types.length > 0) queries.push(Query.equal("type", types));
+  if (types?.length > 0) queries.push(Query.equal("type", types));
   if (searchText) queries.push(Query.contains("name", searchText));
   if (limit) queries.push(Query.limit(limit));
 
