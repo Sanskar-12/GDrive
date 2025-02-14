@@ -4,6 +4,8 @@ import { getTotalSpaceUsed } from "@/lib/actions/file.actions";
 export default async function Home() {
   const totalSpaceUsed = await getTotalSpaceUsed();
 
+  console.log(totalSpaceUsed);
+
   return (
     <div className="dashboard-container">
       {/* Charts and Files Summary */}

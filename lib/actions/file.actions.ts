@@ -208,6 +208,26 @@ export const getTotalSpaceUsed = async () => {
     }
 
     const totalSpace = {
+      image: {
+        size: 0,
+        latestDate: "",
+      },
+      video: {
+        size: 0,
+        latestDate: "",
+      },
+      audio: {
+        size: 0,
+        latestDate: "",
+      },
+      document: {
+        size: 0,
+        latestDate: "",
+      },
+      other: {
+        size: 0,
+        latestDate: "",
+      },
       used: 0,
       total: 2 * 1024 * 1024 * 1024, // 2gb limit in storage bucket
     };
@@ -218,9 +238,18 @@ export const getTotalSpaceUsed = async () => {
       [Query.equal("owner", [currentUser.$id])]
     );
 
-    files.documents.forEach(
-      (file) => (totalSpace.used = totalSpace.used + file.size)
-    );
+    files.documents.forEach((file) => {
+      const fileType = file.type as FileType;
+      totalSpace.used = totalSpace.used + file.size;
+      totalSpace[fileType].size = totalSpace[fileType].size + file.size;
+
+      if (
+        !totalSpace[fileType].latestDate ||
+        new Date(file.$updatedAt) > new Date(totalSpace[fileType].latestDate)
+      ) {
+        totalSpace[fileType].latestDate = file.$updatedAt;
+      }
+    });
 
     return parseStringify(totalSpace);
   } catch (error) {
