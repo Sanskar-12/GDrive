@@ -1,6 +1,6 @@
 "use server";
 
-import { createAdminClient } from "../appwrite";
+import { createAdminClient, createSessionClient } from "../appwrite";
 import { InputFile } from "node-appwrite/file";
 import { appWriteConfig } from "../appwrite/config";
 import { ID, Models, Query } from "node-appwrite";
@@ -194,5 +194,65 @@ export const deleteFile = async ({
     return parseStringify({ status: "success" });
   } catch (error) {
     handleError(error, "Cannot delete the file");
+  }
+};
+
+export const getTotalSpaceUsed = async () => {
+  try {
+    const { databases } = await createSessionClient();
+
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      throw new Error("User not found");
+    }
+
+    const totalSpace = {
+      image: {
+        size: 0,
+        latestDate: "",
+      },
+      video: {
+        size: 0,
+        latestDate: "",
+      },
+      audio: {
+        size: 0,
+        latestDate: "",
+      },
+      document: {
+        size: 0,
+        latestDate: "",
+      },
+      other: {
+        size: 0,
+        latestDate: "",
+      },
+      used: 0,
+      total: 2 * 1024 * 1024 * 1024, // 2gb limit in storage bucket
+    };
+
+    const files = await databases.listDocuments(
+      appWriteConfig.databaseId,
+      appWriteConfig.filesCollectionId,
+      [Query.equal("owner", [currentUser.$id])]
+    );
+
+    files.documents.forEach((file) => {
+      const fileType = file.type as FileType;
+      totalSpace.used = totalSpace.used + file.size;
+      totalSpace[fileType].size = totalSpace[fileType].size + file.size;
+
+      if (
+        !totalSpace[fileType].latestDate ||
+        new Date(file.$updatedAt) > new Date(totalSpace[fileType].latestDate)
+      ) {
+        totalSpace[fileType].latestDate = file.$updatedAt;
+      }
+    });
+
+    return parseStringify(totalSpace);
+  } catch (error) {
+    handleError(error, "Cannot fetch total space used");
   }
 };

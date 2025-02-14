@@ -31,6 +31,11 @@ export const calculatePercentage = (sizeInBytes: number) => {
   return Number(percentage.toFixed(2));
 };
 
+export const calculateAngle = (usedSpace: number) => {
+  const totalSpace = 2 * 1024 * 1024 * 1024; // 2GB
+  return (usedSpace / totalSpace) * 360;
+};
+
 export const getFileType = (fileName: string) => {
   const extension = fileName.split(".").pop()?.toLowerCase();
 
