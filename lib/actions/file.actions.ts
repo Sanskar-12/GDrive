@@ -55,6 +55,7 @@ export const uploadFile = async ({
       });
 
     revalidatePath(path);
+    revalidatePath("/dashboard");
 
     return parseStringify(newFile);
   } catch (error) {
@@ -208,40 +209,36 @@ export const getTotalSpaceUsed = async () => {
     }
 
     const totalSpace = {
-      image: {
-        size: 0,
-        latestDate: "",
-      },
-      video: {
-        size: 0,
-        latestDate: "",
-      },
-      audio: {
-        size: 0,
-        latestDate: "",
-      },
-      document: {
-        size: 0,
-        latestDate: "",
-      },
-      other: {
-        size: 0,
-        latestDate: "",
-      },
+      image: { size: 0, latestDate: "" },
+      document: { size: 0, latestDate: "" },
+      video: { size: 0, latestDate: "" },
+      audio: { size: 0, latestDate: "" },
+      other: { size: 0, latestDate: "" },
       used: 0,
-      total: 2 * 1024 * 1024 * 1024, // 2gb limit in storage bucket
+      all: 2 * 1024 * 1024 * 1024 /* 2GB available bucket storage */,
     };
+
+    let totImg = 0;
 
     const files = await databases.listDocuments(
       appWriteConfig.databaseId,
       appWriteConfig.filesCollectionId,
-      [Query.equal("owner", [currentUser.$id])]
+      [
+        Query.or([
+          Query.equal("owner", currentUser.$id),
+          Query.contains("users", [currentUser.email]),
+        ]),
+        Query.limit(100000), // Ensure it fetches enough records
+      ]
     );
 
     files.documents.forEach((file) => {
       const fileType = file.type as FileType;
-      totalSpace.used = totalSpace.used + file.size;
-      totalSpace[fileType].size = totalSpace[fileType].size + file.size;
+      totalSpace[fileType].size += file.size;
+      if (fileType === "image") {
+        totImg = totImg + file.size;
+      }
+      totalSpace.used += file.size;
 
       if (
         !totalSpace[fileType].latestDate ||
