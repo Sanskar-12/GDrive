@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clsx, type ClassValue } from "clsx";
+import { Mode } from "fs";
+import { Models } from "node-appwrite";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -223,6 +225,76 @@ export const getUsageSummary = (totalSpace: any) => {
       url: "/others",
     },
   ];
+};
+
+export const getRecentFilesSummary = (recentFiles: Models.Document[]) => {
+  return recentFiles.map((file: Models.Document) => {
+    if (file.type === "document") {
+      return {
+        name: file.name,
+        date: file.$createdAt,
+        icon: "/assets/icons/file-document.svg",
+        url: "/documents",
+        fileUrl: file.url,
+      };
+    } else if (file.type === "image") {
+      return {
+        name: file.name,
+        date: file.$createdAt,
+        icon: "/assets/icons/file-image.svg",
+        url: "/images",
+        fileUrl: file.url,
+      };
+    } else if (file.type === "video" || file.type === "audio") {
+      return {
+        name: file.name,
+        date: file.$createdAt,
+        icon: "/assets/icons/file-video.svg",
+        url: "/media",
+        fileUrl: file.url,
+      };
+    } else if (file.type === "other") {
+      return {
+        name: file.name,
+        date: file.$createdAt,
+        icon: "/assets/icons/file-other.svg",
+        url: "/others",
+        fileUrl: file.url,
+      };
+    }
+  });
+
+  // return [
+  //   {
+  //     date: file.$createdAt,
+  //     icon: "/assets/icons/file-document-light.svg",
+  //     url: "/documents",
+  //   },
+  //   {
+  //     title: "Images",
+  //     size: totalSpace.image.size,
+  //     latestDate: totalSpace.image.latestDate,
+  //     icon: "/assets/icons/file-image-light.svg",
+  //     url: "/images",
+  //   },
+  //   {
+  //     title: "Media",
+  //     size: totalSpace.video.size + totalSpace.audio.size,
+  //     latestDate:
+  //       totalSpace.video.latestDate > totalSpace.audio.latestDate
+  //         ? totalSpace.video.latestDate
+  //         : totalSpace.audio.latestDate,
+  //     icon: "/assets/icons/file-video-light.svg",
+  //     url: "/media",
+  //   },
+  //   {
+  //     title: "Others",
+  //     size: totalSpace.other.size,
+  //     latestDate: totalSpace.other.latestDate,
+  //     icon: "/assets/icons/file-other-light.svg",
+  //     url: "/others",
+  //   },
+  // ];
 };
 
 export const getFileTypesParams = (type: string) => {

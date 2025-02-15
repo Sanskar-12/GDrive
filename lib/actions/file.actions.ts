@@ -218,8 +218,6 @@ export const getTotalSpaceUsed = async () => {
       all: 2 * 1024 * 1024 * 1024 /* 2GB available bucket storage */,
     };
 
-    let totImg = 0;
-
     const files = await databases.listDocuments(
       appWriteConfig.databaseId,
       appWriteConfig.filesCollectionId,
@@ -235,9 +233,7 @@ export const getTotalSpaceUsed = async () => {
     files.documents.forEach((file) => {
       const fileType = file.type as FileType;
       totalSpace[fileType].size += file.size;
-      if (fileType === "image") {
-        totImg = totImg + file.size;
-      }
+
       totalSpace.used += file.size;
 
       if (
